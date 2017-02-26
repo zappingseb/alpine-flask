@@ -16,7 +16,8 @@ RUN mkdir ${APP_DIR} \
 	&& chmod 777 /root/ -R
 VOLUME [${APP_DIR}]
 WORKDIR ${APP_DIR}
-
+RUN mkdir ${APP_DIR}/templates \
+        && chown -R nginx:nginx ${APP_DIR}/templates
 # expose web server port
 # only http, for ssl use reverse proxy
 EXPOSE 80
@@ -25,6 +26,10 @@ EXPOSE 80
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY app.ini /app.ini
 COPY entrypoint.sh /entrypoint.sh
+COPY app.py /app/app.py
+COPY template.html /app/templates/template.html
+
+#TAG flaskapp/template_app
 
 # exectute start up script
 ENTRYPOINT ["/entrypoint.sh"]
